@@ -27,6 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(); // <-- this creates /swagger
 }
 
+app.UseExceptionHandler("/error");
 app.UseHttpsRedirection();
 app.UseCors("InternalPolicy");
 app.UseStaticFiles();
