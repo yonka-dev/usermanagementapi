@@ -7,23 +7,15 @@ namespace UserManagementAPI.Controllers;
 
 [ApiController]
 [Route("users")]
-public class UsersController : ControllerBase
+public class UsersController(IUserService service, ILogger<UsersController> logger) : ControllerBase
 {
-    private readonly ILogger<UsersController> _logger;
-    private readonly IUserService _service;
-
-    public UsersController(IUserService service, ILogger<UsersController> logger)
-    {
-        _service = service;
-        _logger = logger;
-    }
+    private readonly ILogger<UsersController> _logger = logger;
+    private readonly IUserService _service = service;
 
     // GET /users
     [HttpGet]
     public IActionResult GetAll()
     {
-        _logger.LogInformation("Retrieving all users");
-
         var users = _service.GetAll()
             .Select(u => new UserReadDto
             {
@@ -58,8 +50,6 @@ public class UsersController : ControllerBase
             return NotFound();
         }
 
-        _logger.LogInformation("User {Id} retrieved successfully", id);
-
         return Ok(new UserReadDto
         {
             Id = user.Id,
@@ -80,8 +70,6 @@ public class UsersController : ControllerBase
             _logger.LogWarning("Invalid model state for creating user {Email}", dto.Email);
             return BadRequest(ModelState);
         }
-
-        _logger.LogInformation("Model state valid for creating user {Email}", dto.Email);
 
         try
         {
@@ -121,8 +109,6 @@ public class UsersController : ControllerBase
             _logger.LogWarning("Invalid model state for updating user {Id}", id);
             return BadRequest(ModelState);
         }
-
-        _logger.LogInformation("Model state valid for updating user {Id}", id);
 
         try
         {

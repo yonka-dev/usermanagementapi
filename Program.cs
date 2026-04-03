@@ -1,3 +1,4 @@
+using UserManagementAPI.Middleware;
 using UserManagementAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,10 +25,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(); // <-- this creates /swagger
+    app.UseSwaggerUI();
 }
 
-app.UseExceptionHandler("/error");
+app.UseErrorHandling();          // Error handling middleware
+app.UseRequestResponseLogging(); // Logging middleware
+
 app.UseHttpsRedirection();
 app.UseCors("InternalPolicy");
 app.UseStaticFiles();
